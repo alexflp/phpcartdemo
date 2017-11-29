@@ -12,6 +12,7 @@ header("Content-Type:text/html;charset=utf-8");
  * 4、在支付成功通知中需要查单确认是否真正支付成功（见：notify.php）
  */
 //获取扫码
+$detect = new Mobile_Detect;
 $input = new FlashPayUnifiedOrder();
 $input->setOrderId(FlashPayConfig::PARTNER_CODE . date("YmdHis"));
 $input->setDescription("test");
@@ -34,12 +35,14 @@ if (!empty($currency) && $currency == 'CNY') {
     }
 }
 
-    if($detect->isMobile()){
+if($detect->isMobile()){
             $result = FlashPayApi::jsApiOrder($input);
+            echo "this phone";
             
-    }else{
-             $result = FlashPayApi::qrOrder($input);
-        }
+}else{
+            $result = FlashPayApi::qrOrder($input);
+            echo "this pc";
+}
 $url2 = $result["code_url"];
 
 //跳转

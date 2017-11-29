@@ -58,49 +58,58 @@ include_once("config.php");
 	}
     ?>
     <tr><td colspan="5"><span style="float:right;text-align: right;"><?php echo $shipping_cost. $list_tax; ?>Amount Payable : <?php echo sprintf("%01.2f", $grand_total);?></span></td></tr>
-	<?php 
-		include_once("view_cart.php");
-		ini_set('date.timezone', 'America/Vancouver');
-		require_once "./lib/FlashPay.Api.php";
-		header("Content-Type:text/html;charset=utf-8");
-		/**
-		 * 流程：
-		 * 1、创建QRCode支付单，取得code_url，生成二维码
-		 * 2、用户扫描二维码，进行支付
-		 * 3、支付完成之后，FlashPay服务器会通知支付成功
-		 * 4、在支付成功通知中需要查单确认是否真正支付成功（见：notify.php）
-		 */
-		//获取扫码
-		$input = new FlashPayUnifiedOrder();
-		$input->setOrderId(FlashPayConfig::PARTNER_CODE . date("YmdHis"));
-		$input->setDescription("test");
-		
-		$input->setPrice($grand_total*100);
+<?php 
+include_once("view_cart.php");
+ini_set('date.timezone', 'America/Vancouver');
+require_once "./lib/FlashPay.Api.php";
+require_once "Mobile/Mobile_Detect.php";
+header("Content-Type:text/html;charset=utf-8");
+/**
+ * 流程：
+ * 1、创建QRCode支付单，取得code_url，生成二维码
+ * 2、用户扫描二维码，进行支付
+ * 3、支付完成之后，FlashPay服务器会通知支付成功
+ * 4、在支付成功通知中需要查单确认是否真正支付成功（见：notify.php）
+ */
+//获取扫码
+$detect = new Mobile_Detect;
+$input = new FlashPayUnifiedOrder();
+$input->setOrderId(FlashPayConfig::PARTNER_CODE . date("YmdHis"));
+$input->setDescription("test");
+$input->setPrice($grand_total*100);
 
-		$input->setCurrency("CAD");
-		$input->setNotifyUrl("https://www.flashpayment.com//notify_url");
-		$input->setOperator("123456");
-		$currency = $input->getCurrency();
-		if (!empty($currency) && $currency == 'CNY') {
-			//建议缓存汇率,每天更新一次,遇节假日或其他无汇率更新情况,可取最近一个工作日的汇率
-			$inputRate = new FlashPayExchangeRate();
-			$rate = FlashPayApi::exchangeRate($inputRate);
-			if ($rate['return_code'] == 'SUCCESS') {
-				$real_pay_amt = $input->getPrice() / $rate['rate'];
-				if ($real_pay_amt < 0.01) {
-					echo 'CNY转换CAD后必须大于0.01CAD';
-					exit();
-				}
-			}
-		}
+$input->setCurrency("CAD");
+$input->setNotifyUrl("https://www.flashpayment.com//notify_url");
+$input->setOperator("123456");
+$currency = $input->getCurrency();
+if (!empty($currency) && $currency == 'CNY') {
+    //建议缓存汇率,每天更新一次,遇节假日或其他无汇率更新情况,可取最近一个工作日的汇率
+    $inputRate = new FlashPayExchangeRate();
+    $rate = FlashPayApi::exchangeRate($inputRate);
+    if ($rate['return_code'] == 'SUCCESS') {
+        $real_pay_amt = $input->getPrice() / $rate['rate'];
+        if ($real_pay_amt < 0.01) {
+            echo 'CNY转换CAD后必须大于0.01CAD';
+            exit();
+        }
+    }
+}
 
-		$result = FlashPayApi::qrOrder($input);
-		$url2 = $result["code_url"];
+if($detect->isMobile()){
+            $result = FlashPayApi::jsApiOrder($input);
+            echo "this phone";
+            
+}else{
+            $result = FlashPayApi::qrOrder($input);
+            echo "this pc";
+}
+$url2 = $result["code_url"];
 
-		//跳转
-		$inputObj = new FlashPayRedirect();
-		$inputObj->setRedirect(urlencode('http://demo.alphapay.ca/success.php?order_id=' . strval($input->getOrderId())));
-		?>
+//跳转
+$inputObj = new FlashPayRedirect();
+$inputObj->setRedirect(urlencode('http://demo.alphapay.ca/success.php?order_id=' . strval($input->getOrderId())));
+?>
+
     <tr><td colspan="5"><a href=<?php echo FlashPayApi::getQRRedirectUrl($result['pay_url'], $inputObj); ?> class="button">Wechat Check out</a><a href="index.php" class="button">Add More Items</a><button type="submit">Update</button></td></tr>
   </tbody>
 </table>
