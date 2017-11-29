@@ -2,6 +2,7 @@
 include_once("view_cart.php");
 ini_set('date.timezone', 'America/Vancouver');
 require_once "./lib/FlashPay.Api.php";
+require_once "Mobile/Mobile_Detect.php";
 header("Content-Type:text/html;charset=utf-8");
 /**
  * 流程：
@@ -33,12 +34,17 @@ if (!empty($currency) && $currency == 'CNY') {
     }
 }
 
-$result = FlashPayApi::qrOrder($input);
+    if($detect->isMobile()){
+            $result = FlashPayApi::jsApiOrder($input);
+            
+    }else{
+             $result = FlashPayApi::qrOrder($input);
+        }
 $url2 = $result["code_url"];
 
 //跳转
 $inputObj = new FlashPayRedirect();
-$inputObj->setRedirect(urlencode('http://119.29.230.16/success.php?order_id=' . strval($input->getOrderId())));
+$inputObj->setRedirect(urlencode('http://demo.alphapay.ca/success.php?order_id=' . strval($input->getOrderId())));
 ?>
 
 <html>
