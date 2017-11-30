@@ -95,22 +95,33 @@ if (!empty($currency) && $currency == 'CNY') {
     }
 }
 
-if($detect->isMobile()){
+  if($detect->isMobile()){
             $result = FlashPayApi::jsApiOrder($input);
-            echo "this phone";
-            
-}else{
-            $result = FlashPayApi::qrOrder($input);
-            echo "this pc";
-}
-$url2 = $result["code_url"];
 
-//跳转
-$inputObj = new FlashPayRedirect();
-$inputObj->setRedirect(urlencode('http://demo.alphapay.ca/success.php?order_id=' . strval($input->getOrderId())));
+            $inputObj = new FlashPayJsApiRedirect();
+           
+            $inputObj->setDirectPay('true');
+            $inputObj->setRedirect(urlencode('http://www.flashpayment.com?order_id=' . strval($input->getOrderId())));
+
+  
+            
+        }else{
+             $result = FlashPayApi::qrOrder($input);
+             $url2 = $result["code_url"];
+            $inputObj = new FlashPayRedirect();
+             $inputObj->setRedirect(urlencode('http://119.29.230.16/success.php?order_id=' . strval($input->getOrderId())));
+            
+        }
+       
 ?>
 
-    <tr><td colspan="5"><a href=<?php echo FlashPayApi::getQRRedirectUrl($result['pay_url'], $inputObj); ?> class="button">Wechat Check out</a><a href="index.php" class="button">Add More Items</a><button type="submit">Update</button></td></tr>
+    <tr><td colspan="5"><a href=<?php if($detect->isMobile()){
+                                        echo FlashPayApi::getJsApiRedirectUrl($result['pay_url'], $inputObj);
+                                        
+                                    }else{
+                                          echo FlashPayApi::getQRRedirectUrl($result['pay_url'], $inputObj); 
+                                    }
+ ?> class="button">Wechat Check out</a><a href="index.php" class="button">Add More Items</a><button type="submit">Update</button></td></tr>
   </tbody>
 </table>
 <input type="hidden" name="return_url" value="<?php 
