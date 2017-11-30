@@ -23,7 +23,7 @@ class FlashPayApi
     public static function exchangeRate($inputObj, $timeOut = 10)
     {
         $partnerCode = FlashPayConfig::PARTNER_CODE;
-        $url = "https://www.flashpayment.com//api/v1.0/gateway/partners/$partnerCode/exchange_rate";
+        $url = "https://pay.alphapay.ca//api/v1.0/gateway/partners/$partnerCode/exchange_rate";
         $inputObj->setTime(self::getMillisecond());//时间戳
         $inputObj->setNonceStr(self::getNonceStr());//随机字符串
         $inputObj->setSign();
@@ -44,7 +44,7 @@ class FlashPayApi
     {
         $partnerCode = FlashPayConfig::PARTNER_CODE;
         $orderId = $inputObj->getOrderId();
-        $url = "https://www.flashpayment.com//api/v1.0/gateway/partners/$partnerCode/orders/$orderId";
+        $url = "https://pay.alphapay.ca//api/v1.0/gateway/partners/$partnerCode/orders/$orderId";
         $inputObj->setTime(self::getMillisecond());//时间戳
         $inputObj->setNonceStr(self::getNonceStr());//随机字符串
         $inputObj->setSign();
@@ -65,7 +65,7 @@ class FlashPayApi
     {
         $partnerCode = FlashPayConfig::PARTNER_CODE;
         $orderId = $inputObj->getOrderId();
-        $url = "https://www.flashpayment.com//api/v1.0/wechat_jsapi_gateway/partners/$partnerCode/orders/$orderId";
+        $url = "https://pay.alphapay.ca//api/v1.0/wechat_jsapi_gateway/partners/$partnerCode/orders/$orderId";
         $inputObj->setTime(self::getMillisecond());//时间戳
         $inputObj->setNonceStr(self::getNonceStr());//随机字符串
         $inputObj->setSign();
@@ -124,7 +124,7 @@ class FlashPayApi
     {
         $partnerCode = FlashPayConfig::PARTNER_CODE;
         $orderId = $inputObj->getOrderId();
-        $url = "https://www.flashpayment.com//api/v1.0/micropay/partners/$partnerCode/orders/$orderId";
+        $url = "https://pay.alphapay.ca//api/v1.0/micropay/partners/$partnerCode/orders/$orderId";
         $inputObj->setTime(self::getMillisecond());//时间戳
         $inputObj->setNonceStr(self::getNonceStr());//随机字符串
         $inputObj->setSign();
@@ -145,7 +145,7 @@ class FlashPayApi
     {
         $partnerCode = FlashPayConfig::PARTNER_CODE;
         $orderId = $inputObj->getOrderId();
-        $url = "https://www.flashpayment.com//api/v1.0/retail_qrcode/partners/$partnerCode/orders/$orderId";
+        $url = "https://pay.alphapay.ca//api/v1.0/retail_qrcode/partners/$partnerCode/orders/$orderId";
         $inputObj->setTime(self::getMillisecond());//时间戳
         $inputObj->setNonceStr(self::getNonceStr());//随机字符串
         $inputObj->setSign();
@@ -166,7 +166,7 @@ class FlashPayApi
     {
         $partnerCode = FlashPayConfig::PARTNER_CODE;
         $orderId = $inputObj->getOrderId();
-        $url = "https://www.flashpayment.com//api/v1.0/gateway/partners/$partnerCode/orders/$orderId";
+        $url = "https://pay.alphapay.ca//api/v1.0/gateway/partners/$partnerCode/orders/$orderId";
         $inputObj->setTime(self::getMillisecond());//时间戳
         $inputObj->setNonceStr(self::getNonceStr());//随机字符串
         $inputObj->setSign();
@@ -188,7 +188,7 @@ class FlashPayApi
         $partnerCode = FlashPayConfig::PARTNER_CODE;
         $orderId = $inputObj->getOrderId();
         $refundId = $inputObj->getRefundId();
-        $url = "https://www.flashpayment.com//api/v1.0/gateway/partners/$partnerCode/orders/$orderId/refunds/$refundId";
+        $url = "https://pay.alphapay.ca//api/v1.0/gateway/partners/$partnerCode/orders/$orderId/refunds/$refundId";
         $inputObj->setTime(self::getMillisecond());//时间戳
         $inputObj->setNonceStr(self::getNonceStr());//随机字符串
         $inputObj->setSign();
@@ -210,7 +210,7 @@ class FlashPayApi
         $partnerCode = FlashPayConfig::PARTNER_CODE;
         $orderId = $inputObj->getOrderId();
         $refundId = $inputObj->getRefundId();
-        $url = "https://www.flashpayment.com//api/v1.0/gateway/partners/$partnerCode/orders/$orderId/refunds/$refundId";
+        $url = "https://pay.alphapay.ca//api/v1.0/gateway/partners/$partnerCode/orders/$orderId/refunds/$refundId";
         $inputObj->setTime(self::getMillisecond());//时间戳
         $inputObj->setNonceStr(self::getNonceStr());//随机字符串
         $inputObj->setSign();
@@ -230,7 +230,7 @@ class FlashPayApi
     public static function orders($inputObj, $timeOut = 10)
     {
         $partnerCode = FlashPayConfig::PARTNER_CODE;
-        $url = "https://www.flashpayment.com//api/v1.0/gateway/partners/$partnerCode/orders";
+        $url = "https://pay.alphapay.ca//api/v1.0/gateway/partners/$partnerCode/orders";
         $inputObj->setTime(self::getMillisecond());//时间戳
         $inputObj->setNonceStr(self::getNonceStr());//随机字符串
         $inputObj->setSign();
